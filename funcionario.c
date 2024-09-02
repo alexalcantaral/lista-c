@@ -9,36 +9,42 @@ struct funcionario {
     Funcionario *prox;
 };
 
-Funcionario* criarNo(){
+Funcionario* criarNo() {
     Funcionario *novo = (Funcionario*)malloc(sizeof(Funcionario));
     return novo;
 }
 
-void adicionarFuncionario(Funcionario *novoNode){
-    printf("INFORME O NOME:");
-    scanf(" %49s", novoNode->nome);
+void adicionarFuncionario(Funcionario *novoNode) {
+    printf("Informe o nome: ");
+    scanf(" %49[^\n]", novoNode->nome);  // Permite espaço no nome
     fflush(stdin);
-    printf("INFORME O SEXO:");
+
+    printf("Informe o cargo: ");
+    scanf(" %19[^\n]", novoNode->cargo);  // Permite espaço no cargo
+    fflush(stdin);
+
+    printf("Informe o sexo (M/F): ");
     scanf(" %c", &novoNode->sexo);
     fflush(stdin);
-    printf("INFORME A IDADE:");
+
+    printf("Informe a idade: ");
     scanf(" %d", &novoNode->idade);
-    printf("INFORME A MATRICULA:");
+
+    printf("Informe a matricula: ");
     scanf(" %d", &novoNode->nMatricula);
     system("clear");
 }
 
-Funcionario* inserirNoFinal(Funcionario *Lista){
+Funcionario* inserirNoFinal(Funcionario *Lista) {
     Funcionario *novoNode = criarNo();
     adicionarFuncionario(novoNode);
 
-    if(Lista == NULL){
+    if (Lista == NULL) {
         novoNode->prox = NULL;
         Lista = novoNode;
-    }
-    else{
+    } else {
         Funcionario* aux = Lista;
-        while(aux->prox != NULL){
+        while (aux->prox != NULL) {
             aux = aux->prox;
         }
         novoNode->prox = NULL;
@@ -47,12 +53,13 @@ Funcionario* inserirNoFinal(Funcionario *Lista){
     return Lista;
 }
 
-void imprimirLista(Funcionario* Lista){
+void imprimirLista(Funcionario* Lista) {
     system("clear");
     Funcionario* aux = Lista;
 
-    while(aux != NULL){
+    while (aux != NULL) {
         printf("\nNome: %s\n", aux->nome);
+        printf("Cargo: %s\n", aux->cargo);
         printf("Sexo: %c\n", aux->sexo);
         printf("Idade: %d\n", aux->idade);
         printf("Matricula: %d\n", aux->nMatricula);
@@ -60,25 +67,25 @@ void imprimirLista(Funcionario* Lista){
     }
 }
 
-Funcionario* removerFuncionario(Funcionario* Lista, int matricula){
-    if (Lista == NULL){
+Funcionario* removerFuncionario(Funcionario* Lista, int matricula) {
+    if (Lista == NULL) {
         printf("Lista vazia!\n");
         return NULL;
     }
 
     Funcionario *aux = Lista, *anterior = NULL;
 
-    while (aux != NULL && aux->nMatricula != matricula){
+    while (aux != NULL && aux->nMatricula != matricula) {
         anterior = aux;
         aux = aux->prox;
     }
 
-    if (aux == NULL){
+    if (aux == NULL) {
         printf("Funcionario com matricula %d nao encontrado!\n", matricula);
         return Lista;
     }
 
-    if (anterior == NULL){
+    if (anterior == NULL) {
         Lista = aux->prox;
     } else {
         anterior->prox = aux->prox;
@@ -89,16 +96,17 @@ Funcionario* removerFuncionario(Funcionario* Lista, int matricula){
     return Lista;
 }
 
-void buscarFuncionario(Funcionario* Lista, int matricula){
+void buscarFuncionario(Funcionario* Lista, int matricula) {
     Funcionario *aux = Lista;
-    while (aux != NULL && aux->nMatricula != matricula){
+    while (aux != NULL && aux->nMatricula != matricula) {
         aux = aux->prox;
     }
 
-    if (aux == NULL){
+    if (aux == NULL) {
         printf("Funcionario com matricula %d nao encontrado!\n", matricula);
     } else {
         printf("\nNome: %s\n", aux->nome);
+        printf("Cargo: %s\n", aux->cargo);
         printf("Sexo: %c\n", aux->sexo);
         printf("Idade: %d\n", aux->idade);
         printf("Matricula: %d\n", aux->nMatricula);
