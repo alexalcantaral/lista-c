@@ -5,6 +5,22 @@
 #define LISTA_DINAMICA 1
 #define LISTA_ESTATICA 2
 
+void salvarDados(Funcionario* listaDinamica, ListaEstatico* listaEstatica, int tipoLista) {
+    if (tipoLista == LISTA_DINAMICA) {
+        salvarListaDinamicaCSV(listaDinamica, "funcionarios_dinamicos.csv");
+    } else {
+        salvarListaEstaticoCSV(listaEstatica, "funcionarios_estaticos.csv");
+    }
+}
+
+void carregarDados(Funcionario** listaDinamica, ListaEstatico* listaEstatica, int tipoLista) {
+    if (tipoLista == LISTA_DINAMICA) {
+        *listaDinamica = lerListaDinamicaCSV("funcionarios_dinamicos.csv");
+    } else {
+        lerListaEstaticoCSV(listaEstatica, "funcionarios_estaticos.csv");
+    }
+}
+
 int main() {
     int escolha, tipoLista, matricula;
     Funcionario *ListaDinamica = NULL;
@@ -23,40 +39,54 @@ int main() {
         return 1;
     }
 
+    // Carregar listas de arquivos CSV ao iniciar o programa
+    carregarDados(&ListaDinamica, &listaEstatica, tipoLista);
+
     do {
         printf("---------------MENU---------------\n");
-        printf("0- Encerrar operacao\n1- Adicionar funcionario\n2- Remover funcionario\n3- Imprimir funcionarios\n4- Buscar funcionario\n\nInforme o que voce deseja:");
+        printf("0- Encerrar operacao\n");
+        printf("1- Adicionar funcionario\n");
+        printf("2- Remover funcionario\n");
+        printf("3- Imprimir funcionarios\n");
+        printf("4- Buscar funcionario\n");
+        printf("\nInforme o que voce deseja: ");
         scanf("%d", &escolha);
         system("clear");
 
         switch (escolha) {
             case 1:
-                if (tipoLista == LISTA_DINAMICA)
+                if (tipoLista == LISTA_DINAMICA) {
                     ListaDinamica = inserirNoFinal(ListaDinamica);
-                else
+                } else {
                     adicionarFuncionarioEstatico(&listaEstatica);
+                }
+                salvarDados(ListaDinamica, &listaEstatica, tipoLista);
                 break;
             case 2:
                 printf("Informe a matricula do funcionario a ser removido: ");
                 scanf("%d", &matricula);
-                if (tipoLista == LISTA_DINAMICA)
+                if (tipoLista == LISTA_DINAMICA) {
                     ListaDinamica = removerFuncionario(ListaDinamica, matricula);
-                else
+                } else {
                     removerFuncionarioEstatico(&listaEstatica, matricula);
+                }
+                salvarDados(ListaDinamica, &listaEstatica, tipoLista);
                 break;
             case 3:
-                if (tipoLista == LISTA_DINAMICA)
+                if (tipoLista == LISTA_DINAMICA) {
                     imprimirLista(ListaDinamica);
-                else
+                } else {
                     imprimirListaEstatico(&listaEstatica);
+                }
                 break;
             case 4:
                 printf("Informe a matricula do funcionario a ser buscado: ");
                 scanf("%d", &matricula);
-                if (tipoLista == LISTA_DINAMICA)
+                if (tipoLista == LISTA_DINAMICA) {
                     buscarFuncionario(ListaDinamica, matricula);
-                else
+                } else {
                     buscarFuncionarioEstatico(&listaEstatica, matricula);
+                }
                 break;
             case 0:
                 printf("Operacao encerrada!\n");
@@ -66,6 +96,8 @@ int main() {
                 break;
         }
     } while (escolha != 0);
+
+    salvarDados(ListaDinamica, &listaEstatica, tipoLista);
 
     return 0;
 }

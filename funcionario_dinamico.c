@@ -16,11 +16,11 @@ Funcionario* criarNo() {
 
 void adicionarFuncionario(Funcionario *novoNode) {
     printf("Informe o nome: ");
-    scanf(" %49[^\n]", novoNode->nome);  // Permite espaço no nome
+    scanf(" %49[^\n]", novoNode->nome);
     fflush(stdin);
 
     printf("Informe o cargo: ");
-    scanf(" %19[^\n]", novoNode->cargo);  // Permite espaço no cargo
+    scanf(" %19[^\n]", novoNode->cargo);
     fflush(stdin);
 
     printf("Informe o sexo (M/F): ");
@@ -111,4 +111,52 @@ void buscarFuncionario(Funcionario* Lista, int matricula) {
         printf("Idade: %d\n", aux->idade);
         printf("Matricula: %d\n", aux->nMatricula);
     }
+}
+
+void salvarListaDinamicaCSV(Funcionario* Lista, const char* filename) {
+    FILE *file = fopen(filename, "w");
+    if (file == NULL) {
+        perror("Erro ao abrir arquivo");
+        return;
+    }
+
+    Funcionario* aux = Lista;
+    while (aux != NULL) {
+        fprintf(file, "%s,%s,%c,%d,%d\n", aux->nome, aux->cargo, aux->sexo, aux->idade, aux->nMatricula);
+        aux = aux->prox;
+    }
+
+    fclose(file);
+    printf("Lista dinâmica salva em %s\n", filename);
+}
+
+Funcionario* lerListaDinamicaCSV(const char* filename) {
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        perror("Erro ao abrir arquivo");
+        return NULL;
+    }
+
+    Funcionario* lista = NULL;
+    Funcionario* aux = NULL;
+    Funcionario* novoNode = NULL;
+
+    while (!feof(file)) {
+        novoNode = criarNo();
+        if (fscanf(file, " %49[^,],%19[^,],%c,%d,%d\n", novoNode->nome, novoNode->cargo, &novoNode->sexo, &novoNode->idade, &novoNode->nMatricula) == 5) {
+            novoNode->prox = NULL;
+            if (lista == NULL) {
+                lista = novoNode;
+                aux = lista;
+            } else {
+                aux->prox = novoNode;
+                aux = novoNode;
+            }
+        } else {
+            free(novoNode);
+        }
+    }
+
+    fclose(file);
+    return lista;
 }

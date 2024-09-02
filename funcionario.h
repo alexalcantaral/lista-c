@@ -10,6 +10,9 @@ void imprimirLista(Funcionario* Lista);
 Funcionario* removerFuncionario(Funcionario* Lista, int matricula);
 void buscarFuncionario(Funcionario* Lista, int matricula);
 
+void salvarListaDinamicaCSV(Funcionario* Lista, const char* filename);
+Funcionario* lerListaDinamicaCSV(const char* filename);
+
 typedef struct {
     char nome[50], cargo[20], sexo;
     int idade, nMatricula;
@@ -25,5 +28,8 @@ void adicionarFuncionarioEstatico(ListaEstatico* lista);
 void imprimirListaEstatico(ListaEstatico* lista);
 void removerFuncionarioEstatico(ListaEstatico* lista, int matricula);
 void buscarFuncionarioEstatico(ListaEstatico* lista, int matricula);
+
+void salvarListaEstaticoCSV(ListaEstatico* lista, const char* filename);
+void lerListaEstaticoCSV(ListaEstatico* lista, const char* filename);
 
 #endif
